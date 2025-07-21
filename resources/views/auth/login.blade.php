@@ -27,17 +27,19 @@
                                 </div>
                             @endif
 
+                            {{-- Email --}}
                             <div class="input-group auth-form-group-custom mb-3">
                                 <span class="input-group-text bg-primary bg-opacity-10 fs-16" id="email-addon">
                                     <i class="mdi mdi-account-outline"></i>
                                 </span>
-                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}"
-                                    placeholder="Masukkan Email" required autofocus aria-describedby="email-addon">
+                                <input type="email" name="email" id="email" class="form-control"
+                                    value="{{ old('email') }}" placeholder="Masukkan Email" required autofocus aria-describedby="email-addon">
                             </div>
                             @error('email')
                                 <div class="text-danger small mb-2">{{ $message }}</div>
                             @enderror
 
+                            {{-- Password --}}
                             <div class="input-group auth-form-group-custom mb-3">
                                 <span class="input-group-text bg-primary bg-opacity-10 fs-16" id="password-addon">
                                     <i class="mdi mdi-lock-outline"></i>
@@ -49,6 +51,7 @@
                                 <div class="text-danger small mb-2">{{ $message }}</div>
                             @enderror
 
+                            {{-- Remember Me dan Lupa Password --}}
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember_me">
@@ -59,6 +62,7 @@
                                 @endif
                             </div>
 
+                            {{-- Tombol Login --}}
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="{{ route('register') }}" class="text-muted">Belum punya akun?</a>
                                 <button type="submit" class="btn btn-primary w-md">Login</button>
@@ -77,4 +81,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ secure_asset('build/js/app.js') }}"></script>
 @endsection
