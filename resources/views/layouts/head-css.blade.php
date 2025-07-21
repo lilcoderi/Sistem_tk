@@ -1,8 +1,9 @@
+<!-- CSS -->
+<link href="{{ secure_asset('build/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ secure_asset('build/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ secure_asset('build/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+
+{{-- Tambahan opsional layout JS seperti pengaturan tema --}}
+<script src="{{ secure_asset('build/js/pages/layout.js') }}"></script>
+
 @yield('css')
-<script src="{{ URL::asset('build/js/pages/layout.js') }}"></script>
-<!-- Bootstrap Css -->
-<link href="{{ URL::asset('build/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-<!-- Icons Css -->
-<link href="{{ URL::asset('build/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-<!-- App Css-->
-<link href="{{ URL::asset('build/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
