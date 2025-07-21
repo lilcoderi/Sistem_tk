@@ -3,27 +3,35 @@
 
 <head>
     <meta charset="utf-8" />
-    <title> @yield('title') Dashboard | TK MARHAMAH HASANAH 2 </title>
+    <title>@yield('title', 'Dashboard') | TK MARHAMAH HASANAH 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Codebucks" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico') }}">
+    <meta name="description" content="Dashboard TK Marhamah Hasanah 2">
+    <meta name="author" content="Hartono">
+    
+    <!-- App Favicon -->
+    <link rel="shortcut icon" href="{{ secure_asset('build/images/favicon.ico') }}">
 
-    <!-- include head css -->
+    <!-- Include Head CSS -->
     @include('layouts.head-css')
+
+    {{-- Page-specific styles --}}
+    @yield('css')
 </head>
 
 <body>
 
+    {{-- Page Content --}}
     @yield('content')
 
-    <!-- customizer -->
+    {{-- Optional Right Sidebar --}}
     {{-- @include('layouts.right-sidebar') --}}
 
-    <!-- vendor-scripts -->
+    {{-- Vendor Scripts --}}
     @include('layouts.vendor-scripts')
 
+    {{-- Page-specific scripts --}}
+    @yield('scripts')
+    
 </body>
 
 </html>
