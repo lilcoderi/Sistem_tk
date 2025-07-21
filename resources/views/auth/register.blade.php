@@ -15,13 +15,11 @@
                 <div class="card mb-0">
                     <div class="card-body">
                         <div class="text-center">
-                            <a href="/" class="logo-dark">
-                                <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="48"
-                                    class="auth-logo logo-dark mx-auto">
-                            </a>
-                            <a href="/" class="logo-dark">
-                                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="48"
-                                    class="auth-logo logo-light mx-auto">
+                            <a href="/" class="d-block mb-3">
+                                <img src="{{ secure_asset('build/images/logo-dark.png') }}" alt="Logo Dark" height="48"
+                                    class="auth-logo logo-dark mx-auto d-block">
+                                <img src="{{ secure_asset('build/images/logo-light.png') }}" alt="Logo Light" height="48"
+                                    class="auth-logo logo-light mx-auto d-block">
                             </a>
 
                             <h4 class="mt-4">Buat Akun Pendaftaran</h4>
@@ -32,6 +30,7 @@
                             <form method="POST" action="{{ route('register') }}">
                                 @csrf
 
+                                {{-- Nama --}}
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nama Lengkap</label>
                                     <input id="name" type="text"
@@ -42,6 +41,7 @@
                                     @enderror
                                 </div>
 
+                                {{-- Email --}}
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input id="email" type="email"
@@ -52,6 +52,7 @@
                                     @enderror
                                 </div>
 
+                                {{-- Password --}}
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <input id="password" type="password"
@@ -62,6 +63,7 @@
                                     @enderror
                                 </div>
 
+                                {{-- Konfirmasi Password --}}
                                 <div class="mb-4">
                                     <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                                     <input id="password_confirmation" type="password" class="form-control"
@@ -71,6 +73,7 @@
                                     @enderror
                                 </div>
 
+                                {{-- Button --}}
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <a href="{{ route('login') }}" class="text-muted">
                                         <i class="mdi mdi-login me-1"></i> Sudah punya akun?
@@ -83,8 +86,8 @@
                         </div>
 
                         <div class="mt-5 text-center">
-                            <p>
-                                ©
+                            <p class="text-muted mb-0">
+                                &copy;
                                 <script>
                                     document.write(new Date().getFullYear())
                                 </script>
@@ -99,5 +102,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ secure_asset('build/js/app.js') }}"></script>
 @endsection
