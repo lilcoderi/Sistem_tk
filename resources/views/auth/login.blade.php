@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <div class="text-center">
                         <a href="/" class="d-block mb-3">
-                            <img src="{{ secure_asset('assets/images/logo-dark.png') }}" alt="Logo" height="48" class="auth-logo mx-auto d-block">
+                            <img src="{{ asset('assets/images/logo-dark.png') }}" alt="Logo" height="48" class="auth-logo mx-auto d-block">
                         </a>
                         <h4 class="mt-4">Selamat Datang Kembali <i class="mdi mdi-heart text-danger"></i></h4>
                         <p class="text-muted">Login untuk melanjutkan ke Dashboard TK Marhamah Hasanah 2</p>
@@ -84,5 +84,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ secure_asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 @endsection
