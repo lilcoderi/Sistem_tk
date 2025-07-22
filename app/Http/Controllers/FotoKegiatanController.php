@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\FotoKegiatan;
-
+use App\Models\KegiatanTK;
 use Illuminate\Http\Request;
 
 class FotoKegiatanController extends Controller
 {
     public function index()
     {
-        $data = KegiatanTk::with('fotoKegiatan')->orderBy('tanggal', 'desc')->get();
+        $data = KegiatanTK::with('fotoKegiatan')->orderBy('tanggal', 'desc')->get();
         return view('kepala_sekolah.siswa.foto.index', compact('data'));
     }
 
     public function create()
     {
-        $kegiatan = KegiatanTk::all();
+        $kegiatan = KegiatanTK::all();
         return view('kepala_sekolah.siswa.foto.create', compact('kegiatan'));
     }
 
@@ -97,7 +97,7 @@ public function update(Request $request, $id)
 
     public function show($id)
 {
-    $kegiatan = KegiatanTk::with('fotoKegiatan')->findOrFail($id);
+    $kegiatan = KegiatanTK::with('fotoKegiatan')->findOrFail($id);
     return view('kepala_sekolah.siswa.foto.detail', compact('kegiatan'));
 }
 
