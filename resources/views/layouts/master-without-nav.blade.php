@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Halaman login TK Marhamah Hasanah 2" name="description" />
     <meta content="Hartono" name="author" />
-    <link rel="shortcut icon" href="{{ secure_asset('build/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ secure_asset('assets/images/favicon.ico') }}">
     
     {{-- Include CSS --}}
     @include('layouts.head-css')
