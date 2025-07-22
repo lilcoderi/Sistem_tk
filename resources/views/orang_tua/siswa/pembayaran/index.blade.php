@@ -50,8 +50,10 @@
                                 <span class="badge bg-warning text-dark">Pending</span>
                             @elseif ($pembayaran->status === 'diterima')
                                 <span class="badge bg-success">Diterima</span>
-                            @else
+                            @elseif ($pembayaran->status === 'ditolak')
                                 <span class="badge bg-danger">Ditolak</span>
+                            @else
+                                <span class="badge bg-secondary">Tidak Diketahui</span>
                             @endif
                         </div>
                     </div>
