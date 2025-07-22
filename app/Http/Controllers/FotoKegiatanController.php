@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FotoKegiatan;
-use App\Models\KegiatanTk;
+
 use Illuminate\Http\Request;
 
 class FotoKegiatanController extends Controller
