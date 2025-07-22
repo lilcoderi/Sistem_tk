@@ -48,12 +48,12 @@
                             <i class="bi bi-flag text-success me-2"></i><strong>Status:</strong>
                             @if ($pembayaran->status === 'pending')
                                 <span class="badge bg-warning text-dark">Pending</span>
-                            @elseif ($pembayaran->status === 'diterima')
+                            @elseif ($pembayaran->status === 'verifikasi')
                                 <span class="badge bg-success">Diterima</span>
                             @elseif ($pembayaran->status === 'ditolak')
                                 <span class="badge bg-danger">Ditolak</span>
                             @else
-                                <span class="badge bg-secondary">Tidak Diketahui</span>
+                                <span class="badge bg-secondary">Status Tidak Diketahui</span>
                             @endif
                         </div>
                     </div>
