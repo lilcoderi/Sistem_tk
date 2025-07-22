@@ -1,11 +1,11 @@
 <!-- JavaScript -->
-<script src="{{ secure_asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/metismenu/dist/metisMenu.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/node-waves/dist/waves.js') }}"></script>
+<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+<script src="{{ asset('assets/libs/metismenu/dist/metisMenu.js') }}"></script>
+<script src="{{ asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
+<script src="{{ asset('assets/libs/node-waves/dist/waves.js') }}"></script>
 
-<script src="{{ secure_asset('assets/js/app.min.js') }}"></script>
+<script src="{{ asset('assets/js/app.min.js') }}"></script>
 
 @yield('scripts')
 
@@ -61,13 +61,13 @@
 </x-guest-layout>
 <!-- JAVASCRIPT -->
 <!-- JavaScript -->
-<script src="{{ secure_asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/metismenu/dist/metisMenu.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
-<script src="{{ secure_asset('assets/libs/node-waves/dist/waves.js') }}"></script>
+<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+<script src="{{ asset('assets/libs/metismenu/dist/metisMenu.js') }}"></script>
+<script src="{{ asset('assets/libs/simplebar/dist/simplebar.js') }}"></script>
+<script src="{{ asset('assets/libs/node-waves/dist/waves.js') }}"></script>
 
-<script src="{{ secure_asset('assets/js/app.min.js') }}"></script>
+<script src="{{ asset('assets/js/app.min.js') }}"></script>
 
 @yield('scripts')
 
