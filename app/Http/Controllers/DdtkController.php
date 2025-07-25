@@ -29,7 +29,7 @@ public function show($id)
     public function jalankan($id)
     {
         try {
-            $response = Http::timeout(10)->get("http://13.239.122.173:5002/predict/{$id}");
+            $response = Http::timeout(10)->get("https://sistem-tk-py.up.railway.app/predict/{$id}");
 
             if ($response->successful()) {
                 $data = $response->json();

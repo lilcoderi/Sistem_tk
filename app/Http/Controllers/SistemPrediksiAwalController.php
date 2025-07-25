@@ -28,7 +28,7 @@ class SistemPrediksiAwalController extends Controller
 
             // 2. Kirim data ke sistem pakar (Flask API)
             $client = new Client();
-            $response = $client->post('http://13.239.122.173:5000/prediksi', [
+            $response = $client->post('https://sistem-tk-py.up.railway.app/prediksi', [
                 'json' => ['id_siswa' => (int) $id_siswa],
                 'timeout' => 10, // Tambahkan timeout agar tidak nge-hang
             ]);

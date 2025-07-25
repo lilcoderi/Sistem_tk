@@ -21,7 +21,7 @@ class SistemPakarController extends Controller
             $id_asesmen = $asesmen->id_asesmen;
 
             // Kirim data ke Flask API untuk menjalankan/overwrite hasil
-            $response = Http::post('http://13.239.122.173:5001/hasilasesmen', [
+            $response = Http::post('https://sistem-tk-py.up.railway.app/hasilasesmen', [
                 'id_siswa' => $id_siswa,
                 'id_asesmen' => $id_asesmen
             ]);
