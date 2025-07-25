@@ -54,8 +54,7 @@
         @endif
 
         <!-- Tombol Jalankan Sistem Pakar -->
-        <a href="#" class="btn btn-success btn-sm mb-3"
-            onclick="jalankanSistemPakar('{{ $siswa->id }}', '{{ $siswa->nama_lengkap }}')">
+        <a href="{{ route('prediksi.awal.jalankan', $siswa->id) }}" class="btn btn-success btn-sm mb-3">
             Jalankan Sistem Pakar
         </a>
 
@@ -477,7 +476,7 @@
         <a href="{{ route('data-siswa.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 
-    <script>
+    {{-- <script>
         function jalankanSistemPakar(id, nama) {
             Swal.fire({
                 title: 'Yakin?',
@@ -529,7 +528,7 @@
                 }
             });
         }
-    </script>
+    </script> --}}
 
 
 
