@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DokumenPersyaratan;
 use App\Models\IdentitasAnak;
+use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 class DokumenPersyaratanController extends Controller
@@ -19,6 +20,16 @@ class DokumenPersyaratanController extends Controller
 
     public function store(Request $request, $id_pendaftaran)
     {
+        // ✅ Inisialisasi konfigurasi Cloudinary dari .env
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+            'url' => ['secure' => true]
+        ]);
+
         $request->validate([
             'akta_kelahiran' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'kartu_keluarga' => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -37,7 +48,7 @@ class DokumenPersyaratanController extends Controller
             'id_pendaftaran' => $id_pendaftaran,
         ];
 
-        // ✅ Upload setiap file ke Cloudinary
+        // Upload ke Cloudinary
         if ($request->hasFile('akta_kelahiran')) {
             $uploadedAkta = (new UploadApi())->upload(
                 $request->file('akta_kelahiran')->getRealPath(),
