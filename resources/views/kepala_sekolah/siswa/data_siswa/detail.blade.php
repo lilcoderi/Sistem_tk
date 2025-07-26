@@ -381,7 +381,7 @@
                             <div class="col-md-4 mb-4">
                                 <h6>Akta Kelahiran</h6>
                                 @if (!empty($siswa->dokumenPersyaratan->akta_kelahiran))
-                                    <img src="{{ asset('storage/' . $siswa->dokumenPersyaratan->akta_kelahiran) }}"
+                                    <img src="{{$siswa->dokumenPersyaratan->akta_kelahiran}}"
                                         alt="Akta Kelahiran" class="img-fluid rounded border">
                                 @else
                                     <p class="text-muted">Tidak ada dokumen.</p>
@@ -393,7 +393,7 @@
                             <div class="col-md-4 mb-4">
                                 <h6>Kartu Keluarga</h6>
                                 @if (!empty($siswa->dokumenPersyaratan->kartu_keluarga))
-                                    <img src="{{ asset('storage/' . $siswa->dokumenPersyaratan->kartu_keluarga) }}"
+                                    <img src="{{$siswa->dokumenPersyaratan->kartu_keluarga}}"
                                         alt="Kartu Keluarga" class="img-fluid rounded border">
                                 @else
                                     <p class="text-muted">Tidak ada dokumen.</p>
@@ -404,7 +404,7 @@
                             <div class="col-md-4 mb-4">
                                 <h6>KTP Orang Tua</h6>
                                 @if (!empty($siswa->dokumenPersyaratan->ktp_orang_tua))
-                                    <img src="{{ asset('storage/' . $siswa->dokumenPersyaratan->ktp_orang_tua) }}"
+                                    <img src="{{$siswa->dokumenPersyaratan->ktp_orang_tua}}"
                                         alt="KTP Orang Tua" class="img-fluid rounded border">
                                 @else
                                     <p class="text-muted">Tidak ada dokumen.</p>
