@@ -106,7 +106,7 @@
                         onchange="previewImage(this, 'preview-bukti')" {{ isset($pembayaran) ? '' : 'required' }}>
                     <div id="preview-bukti">
                         @if (isset($pembayaran) && $pembayaran->bukti_pembayaran)
-                            <img src="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}"
+                            <img src="{{ $pembayaran->bukti_pembayaran }}"
                                 alt="Bukti Pembayaran Sebelumnya" class="img-fluid mt-2" />
                         @endif
                     </div>
