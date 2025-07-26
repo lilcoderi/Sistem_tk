@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\IdentitasAnak;
-use App\Models\Orangtua;
+use App\Models\OrangTua;
 
 class OrangtuaController extends Controller
 {
     public function create($id_pendaftaran)
     {
         $siswa = IdentitasAnak::where('id_pendaftaran', $id_pendaftaran)->firstOrFail();
-        $orangtua = Orangtua::where('id_siswa', $siswa->id)->first();
+        $orangtua = OrangTua::where('id_siswa', $siswa->id)->first();
 
         return view('orang_tua.pendaftaran.identitas_ortu', compact('id_pendaftaran', 'orangtua'));
     }
@@ -44,7 +44,7 @@ class OrangtuaController extends Controller
 
         $siswa = IdentitasAnak::where('id_pendaftaran', $id_pendaftaran)->firstOrFail();
 
-        Orangtua::updateOrCreate(
+        OrangTua::updateOrCreate(
             ['id_siswa' => $siswa->id],
             [
                 'nama_ayah' => $request->nama_ayah,
