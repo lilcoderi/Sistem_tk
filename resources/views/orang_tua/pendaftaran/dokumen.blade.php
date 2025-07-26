@@ -95,7 +95,7 @@
                         <div id="preview-akta">
                             @if (isset($dokumen->akta_kelahiran))
                                 <img src="{{ $dokumen->akta_kelahiran }}" class="img-fluid mt-2"
-                                    alt="Akta Kelahiran">
+                                    alt="Akta Kelahiran" max-wid>
                             @endif
                         </div>
                     </div>
