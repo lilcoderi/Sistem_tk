@@ -62,7 +62,7 @@
                         <strong><i class="bi bi-file-image me-2 text-success"></i>Bukti Pembayaran:</strong><br>
                         @if ($pembayaran->bukti_pembayaran)
                             <div class="text-center mt-2">
-                                <img src="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}" alt="Bukti Pembayaran"
+                                <img src="{{ $pembayaran->bukti_pembayaran }}" alt="Bukti Pembayaran"
                                     class="img-fluid rounded border" style="max-height: 250px; object-fit: cover;">
                             </div>
                         @else

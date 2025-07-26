@@ -122,8 +122,10 @@
                                                         aria-label="Tutup"></button>
                                                 </div>
                                                 <div class="modal-body text-center">
-                                                    <img src="{{ asset('storage/' . $p->bukti_pembayaran) }}"
-                                                        alt="Bukti Pembayaran" class="img-fluid rounded shadow-sm">
+                                                    <img src="{{ $p->bukti_pembayaran }}"
+     alt="Bukti Pembayaran"
+     class="img-fluid rounded shadow-sm">
+
                                                 </div>
                                             </div>
                                         </div>

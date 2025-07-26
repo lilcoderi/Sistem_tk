@@ -43,8 +43,10 @@
                     <li class="list-group-item">
                         <strong>Dokumentasi Foto:</strong><br>
                         @if ($item->dokumentasi_foto)
-                            <img src="{{ asset('storage/' . $item->dokumentasi_foto) }}" alt="Foto"
-                                class="img-thumbnail mt-2" style="max-width: 200px;">
+                            <img src="{{ $item->dokumentasi_foto }}" alt="Foto"
+     class="img-fluid rounded shadow mt-2"
+     style="max-height: 400px; object-fit: contain;">
+
                         @else
                             <span class="text-muted">Tidak ada foto</span>
                         @endif

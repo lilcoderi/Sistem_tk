@@ -70,8 +70,8 @@
                 @foreach ($kegiatan->fotoKegiatan as $foto)
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0">
-                            <img src="{{ asset('storage/' . $foto->foto) }}" class="card-img-top" alt="Foto kegiatan"
-                                style="object-fit: cover; height: 200px;">
+                            <img src="{{ $foto->foto }}" alt="Foto Kegiatan" class="img-thumbnail" style="max-width:200px;">
+
                             <div class="card-body">
                                 <p class="card-text text-muted">{{ $foto->keterangan ?? 'Tidak ada keterangan.' }}</p>
                             </div>

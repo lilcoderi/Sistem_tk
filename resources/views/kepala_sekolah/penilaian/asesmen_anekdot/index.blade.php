@@ -98,8 +98,8 @@
                             </td>
                             <td class="text-center">
                                 @if ($item->dokumentasi_foto)
-                                    <img src="{{ asset('storage/' . $item->dokumentasi_foto) }}" alt="Foto"
-                                        class="img-thumbnail" style="max-width: 80px;">
+<img src="{{ $item->dokumentasi_foto }}" alt="Foto"
+         class="img-thumbnail" style="max-width: 80px;">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif

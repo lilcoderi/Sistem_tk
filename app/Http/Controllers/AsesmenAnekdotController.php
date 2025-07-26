@@ -8,35 +8,34 @@ use App\Models\IdentitasAnak;
 use App\Models\LingkupPerkembangan;
 use App\Models\Subtema;
 use App\Models\NotifikasiOrangTua;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Cloudinary\Api\Upload\UploadApi;
 
 class AsesmenAnekdotController extends Controller
 {
     public function index(Request $request)
-{
-    // Ambil semua subtema (untuk opsi filter)
-    $subtemaList = \App\Models\Subtema::with('tematk')->get();
+    {
+        // Ambil semua subtema (untuk opsi filter)
+        $subtemaList = Subtema::with('tematk')->get();
 
-    // Filter
-    $query = AsesmenAnekdot::with(['siswa', 'lingkup', 'subtema.tematk']);
-    $kelas = $request->kelas ?? 'A'; 
+        // Filter
+        $query = AsesmenAnekdot::with(['siswa', 'lingkup', 'subtema.tematk']);
+        $kelas = $request->kelas ?? 'A';
 
-    if ($request->filled('subtema_id')) {
-        $query->where('subtema_id', $request->subtema_id);
+        if ($request->filled('subtema_id')) {
+            $query->where('subtema_id', $request->subtema_id);
+        }
+
+        if ($request->filled('kelas')) {
+            $query->whereHas('subtema.tematk', function ($q) use ($request) {
+                $q->where('kelas', $request->kelas);
+            });
+        }
+
+        $data = $query->orderBy('tanggal_pelaksanaan', 'desc')->get();
+
+        return view('kepala_sekolah.penilaian.asesmen_anekdot.index', compact('data', 'subtemaList'));
     }
-
-    if ($request->filled('kelas')) {
-        $query->whereHas('subtema.tematk', function ($q) use ($request) {
-            $q->where('kelas', $request->kelas);
-        });
-    }
-
-    $data = $query->orderBy('tanggal_pelaksanaan', 'desc')->get();
-
-    return view('kepala_sekolah.penilaian.asesmen_anekdot.index', compact('data', 'subtemaList'));
-}
-
 
     public function create()
     {
@@ -47,38 +46,44 @@ class AsesmenAnekdotController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'siswa_id' => 'required|exists:identitas_anak,id',
-        'lingkup_id' => 'required|exists:lingkup_perkembangan,id',
-        'subtema_id' => 'required|exists:subtema,id',
-        'tanggal_pelaksanaan' => 'required|date',
-        'keterangan' => 'nullable|string',
-        'dokumentasi_foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
-
-    if ($request->hasFile('dokumentasi_foto')) {
-        $validated['dokumentasi_foto'] = $request->file('dokumentasi_foto')->store('dokumentasi_anekdot', 'public');
-    }
-
-    $asesmen = AsesmenAnekdot::create($validated);
-
-    // Ambil user_id orang tua dari relasi siswa -> pendaftaran
-    $siswa = $asesmen->siswa;
-    $pendaftaran = $siswa->pendaftaran()->whereNotNull('user_id')->first();
-
-    if ($pendaftaran) {
-        NotifikasiOrangTua::create([
-            'user_id' => $pendaftaran->user_id,
-            'tipe' => 'asesmen_anekdot',
-            'referensi_id' => $asesmen->id,
-            'pesan' => 'Asesmen anekdot baru untuk anak ' . $siswa->nama_lengkap . ' telah ditambahkan.',
+    {
+        $validated = $request->validate([
+            'siswa_id'           => 'required|exists:identitas_anak,id',
+            'lingkup_id'         => 'required|exists:lingkup_perkembangan,id',
+            'subtema_id'         => 'required|exists:subtema,id',
+            'tanggal_pelaksanaan'=> 'required|date',
+            'keterangan'         => 'nullable|string',
+            'dokumentasi_foto'   => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
+
+        // ✅ Upload ke Cloudinary
+        if ($request->hasFile('dokumentasi_foto')) {
+            $uploadedFile = (new UploadApi())->upload(
+                $request->file('dokumentasi_foto')->getRealPath(),
+                [
+                    'folder' => 'dokumentasi_anekdot'
+                ]
+            );
+            $validated['dokumentasi_foto'] = $uploadedFile['secure_url'];
+        }
+
+        $asesmen = AsesmenAnekdot::create($validated);
+
+        // Kirim notifikasi ke orang tua
+        $siswa = $asesmen->siswa;
+        $pendaftaran = $siswa->pendaftaran()->whereNotNull('user_id')->first();
+
+        if ($pendaftaran) {
+            NotifikasiOrangTua::create([
+                'user_id'       => $pendaftaran->user_id,
+                'tipe'          => 'asesmen_anekdot',
+                'referensi_id'  => $asesmen->id,
+                'pesan'         => 'Asesmen anekdot baru untuk anak ' . $siswa->nama_lengkap . ' telah ditambahkan.',
+            ]);
+        }
+
+        return redirect()->route('asesmen.anekdot.index')->with('success', 'Asesmen berhasil ditambahkan.');
     }
-
-    return redirect()->route('asesmen.anekdot.index')->with('success', 'Asesmen berhasil ditambahkan.');
-}
-
 
     public function show($id)
     {
@@ -98,21 +103,25 @@ class AsesmenAnekdotController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'siswa_id' => 'required|exists:identitas_anak,id',
-            'lingkup_id' => 'required|exists:lingkup_perkembangan,id',
-            'subtema_id' => 'required|exists:subtema,id',
-            'tanggal_pelaksanaan' => 'required|date',
-            'keterangan' => 'nullable|string',
-            'dokumentasi_foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'siswa_id'           => 'required|exists:identitas_anak,id',
+            'lingkup_id'         => 'required|exists:lingkup_perkembangan,id',
+            'subtema_id'         => 'required|exists:subtema,id',
+            'tanggal_pelaksanaan'=> 'required|date',
+            'keterangan'         => 'nullable|string',
+            'dokumentasi_foto'   => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
         $item = AsesmenAnekdot::findOrFail($id);
 
+        // ✅ Upload ulang jika ada foto baru
         if ($request->hasFile('dokumentasi_foto')) {
-            if ($item->dokumentasi_foto) {
-                Storage::disk('public')->delete($item->dokumentasi_foto);
-            }
-            $validated['dokumentasi_foto'] = $request->file('dokumentasi_foto')->store('dokumentasi_anekdot', 'public');
+            $uploadedFile = (new UploadApi())->upload(
+                $request->file('dokumentasi_foto')->getRealPath(),
+                [
+                    'folder' => 'dokumentasi_anekdot'
+                ]
+            );
+            $validated['dokumentasi_foto'] = $uploadedFile['secure_url'];
         }
 
         $item->update($validated);
@@ -122,28 +131,24 @@ class AsesmenAnekdotController extends Controller
     public function destroy($id)
     {
         $item = AsesmenAnekdot::findOrFail($id);
-        if ($item->dokumentasi_foto) {
-            Storage::disk('public')->delete($item->dokumentasi_foto);
-        }
+        // Kalau mau hapus juga dari Cloudinary, simpan public_id saat upload lalu panggil UploadApi()->destroy()
         $item->delete();
         return redirect()->route('asesmen.anekdot.index')->with('success', 'Asesmen berhasil dihapus.');
     }
 
     public function profilAnekdotOrangtua()
-{
-    $userId = Auth::id();
+    {
+        $userId = Auth::id();
 
-    // Ambil siswa berdasarkan user yang login
-    $anak = \App\Models\IdentitasAnak::whereHas('pendaftaran', function ($q) use ($userId) {
-        $q->where('user_id', $userId);
-    })->pluck('id'); // Ambil hanya ID-nya
+        $anak = IdentitasAnak::whereHas('pendaftaran', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })->pluck('id');
 
-    // Ambil data asesmen untuk anak tersebut
-    $data = AsesmenAnekdot::with(['siswa', 'lingkup', 'subtema.tematk'])
-        ->whereIn('siswa_id', $anak)
-        ->orderBy('tanggal_pelaksanaan', 'desc')
-        ->get();
+        $data = AsesmenAnekdot::with(['siswa', 'lingkup', 'subtema.tematk'])
+            ->whereIn('siswa_id', $anak)
+            ->orderBy('tanggal_pelaksanaan', 'desc')
+            ->get();
 
-    return view('orang_tua.siswa.kegiatan.index', compact('data'));
-}
+        return view('orang_tua.siswa.kegiatan.index', compact('data'));
+    }
 }

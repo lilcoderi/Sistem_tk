@@ -39,8 +39,8 @@
             <div class="card-body">
                 {{-- Foto Lama --}}
                 <div class="mb-3 text-center">
-                    <img src="{{ asset('storage/' . $foto->foto) }}" alt="Foto Lama" class="img-fluid rounded shadow-sm"
-                        style="max-height: 300px;">
+                    <img src="{{ $foto->foto }}" alt="Foto Kegiatan" class="img-thumbnail"  style="max-height: 300px;">
+
                     <p class="text-muted mt-2 mb-0"><small>Foto saat ini</small></p>
                 </div>
 

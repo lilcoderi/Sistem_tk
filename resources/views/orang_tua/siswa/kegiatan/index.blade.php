@@ -55,8 +55,9 @@
 
                 @if ($item->dokumentasi_foto)
                     <div class="text-center">
-                        <img src="{{ asset('storage/' . $item->dokumentasi_foto) }}" alt="Dokumentasi"
-                            class="img-fluid rounded shadow-sm border" style="max-height: 250px;">
+                        <img src="{{ $item->dokumentasi_foto }}" alt="Foto"
+     class="img-fluid rounded shadow mt-2"
+     style="max-height: 400px; object-fit: contain;">
                     </div>
                 @endif
             </div>

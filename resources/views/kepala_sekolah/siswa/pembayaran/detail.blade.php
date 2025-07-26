@@ -65,7 +65,7 @@
                                 <i class="bi bi-card-image text-secondary me-2"></i>
                                 <strong>Bukti Pembayaran:</strong><br>
                                 @if ($pembayaran->bukti_pembayaran)
-                                    <img src="{{ asset('storage/' . $pembayaran->bukti_pembayaran) }}"
+                                    <img src="{{ $pembayaran->bukti_pembayaran }}"
                                         alt="Bukti Pembayaran" class="img-fluid rounded shadow-sm mt-2"
                                         style="max-width: 400px;">
                                 @else
