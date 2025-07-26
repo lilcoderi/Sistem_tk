@@ -94,7 +94,7 @@
                             onchange="previewImage(this, 'preview-akta')">
                         <div id="preview-akta">
                             @if (isset($dokumen->akta_kelahiran))
-                                <img src="{{ asset('storage/' . $dokumen->akta_kelahiran) }}" class="img-fluid mt-2"
+                                <img src="{{ $dokumen->akta_kelahiran }}" class="img-fluid mt-2"
                                     alt="Akta Kelahiran">
                             @endif
                         </div>
@@ -113,7 +113,7 @@
                             onchange="previewImage(this, 'preview-kk')">
                         <div id="preview-kk">
                             @if (isset($dokumen->kartu_keluarga))
-                                <img src="{{ asset('storage/' . $dokumen->kartu_keluarga) }}" class="img-fluid mt-2"
+                                <img src="{{ $dokumen->kartu_keluarga }}" class="img-fluid mt-2"
                                     alt="Kartu Keluarga">
                             @endif
                         </div>
@@ -132,7 +132,7 @@
                             onchange="previewImage(this, 'preview-ktp')">
                         <div id="preview-ktp">
                             @if (isset($dokumen->ktp_orang_tua))
-                                <img src="{{ asset('storage/' . $dokumen->ktp_orang_tua) }}" class="img-fluid mt-2"
+                                <img src="{{ $dokumen->ktp_orang_tua }}" class="img-fluid mt-2"
                                     alt="KTP Orang Tua">
                             @endif
                         </div>

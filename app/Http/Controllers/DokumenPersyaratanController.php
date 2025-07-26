@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DokumenPersyaratan;
 use App\Models\IdentitasAnak;
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Api\Upload\UploadApi;
 
 class DokumenPersyaratanController extends Controller
 {
     public function create($id_pendaftaran)
     {
         $siswa = IdentitasAnak::where('id_pendaftaran', $id_pendaftaran)->firstOrFail();
-        $dokumen = \App\Models\DokumenPersyaratan::where('id_siswa', $siswa->id)->first();
+        $dokumen = DokumenPersyaratan::where('id_siswa', $siswa->id)->first();
+
         return view('orang_tua.pendaftaran.dokumen', compact('id_pendaftaran', 'dokumen'));
     }
 
@@ -30,38 +31,41 @@ class DokumenPersyaratanController extends Controller
         // Cek apakah dokumen sudah ada
         $dokumen = DokumenPersyaratan::where('id_siswa', $siswa->id)->first();
 
-        // Siapkan data yang akan di-update atau disimpan
+        // Data yang akan diupdate / disimpan
         $data = [
-            'id_siswa' => $siswa->id,
+            'id_siswa'       => $siswa->id,
             'id_pendaftaran' => $id_pendaftaran,
         ];
 
+        // ✅ Upload setiap file ke Cloudinary
         if ($request->hasFile('akta_kelahiran')) {
-            if ($dokumen && $dokumen->akta_kelahiran) {
-                Storage::disk('public')->delete($dokumen->akta_kelahiran);
-            }
-            $data['akta_kelahiran'] = $request->file('akta_kelahiran')->store('dokumen', 'public');
+            $uploadedAkta = (new UploadApi())->upload(
+                $request->file('akta_kelahiran')->getRealPath(),
+                ['folder' => 'dokumen_persyaratan']
+            );
+            $data['akta_kelahiran'] = $uploadedAkta['secure_url'];
         }
 
         if ($request->hasFile('kartu_keluarga')) {
-            if ($dokumen && $dokumen->kartu_keluarga) {
-                Storage::disk('public')->delete($dokumen->kartu_keluarga);
-            }
-            $data['kartu_keluarga'] = $request->file('kartu_keluarga')->store('dokumen', 'public');
+            $uploadedKK = (new UploadApi())->upload(
+                $request->file('kartu_keluarga')->getRealPath(),
+                ['folder' => 'dokumen_persyaratan']
+            );
+            $data['kartu_keluarga'] = $uploadedKK['secure_url'];
         }
 
         if ($request->hasFile('ktp_orang_tua')) {
-            if ($dokumen && $dokumen->ktp_orang_tua) {
-                Storage::disk('public')->delete($dokumen->ktp_orang_tua);
-            }
-            $data['ktp_orang_tua'] = $request->file('ktp_orang_tua')->store('dokumen', 'public');
+            $uploadedKTP = (new UploadApi())->upload(
+                $request->file('ktp_orang_tua')->getRealPath(),
+                ['folder' => 'dokumen_persyaratan']
+            );
+            $data['ktp_orang_tua'] = $uploadedKTP['secure_url'];
         }
 
+        // Simpan atau update
         if ($dokumen) {
-            // Update jika data sudah ada
             $dokumen->update($data);
         } else {
-            // Insert jika data belum ada
             DokumenPersyaratan::create($data);
         }
 
