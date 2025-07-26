@@ -74,7 +74,7 @@
                 <label for="dokumentasi_foto" class="form-label">Dokumentasi Foto</label>
                 @if ($item->dokumentasi_foto)
                     <div class="mb-2">
-                        <img src="{{ asset('storage/' . $item->dokumentasi_foto) }}" alt="Foto Sebelumnya" class="img-thumbnail" style="max-width: 120px;">
+                        <img src="{{ $item->dokumentasi_foto }}" alt="Foto Sebelumnya" class="img-thumbnail" style="max-width: 120px;">
                     </div>
                 @endif
                 <input type="file" name="dokumentasi_foto" class="form-control" accept="image/*">
