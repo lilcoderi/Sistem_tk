@@ -10,7 +10,7 @@ class TumbuhKembangController extends Controller
 {
     public function index()
     {
-        $data = TumbuhKembang::with('siswa')->get();
+        $data = TumbuhKembang::with('siswa')->latest()->get();
         return view('kepala_sekolah.prediksi.data_tumbuh_kembang.index', compact('data'));
     }
 
@@ -18,27 +18,27 @@ class TumbuhKembangController extends Controller
     {
         $siswa = IdentitasAnak::all();
         return view('kepala_sekolah.prediksi.data_tumbuh_kembang.create', compact('siswa'));
-        
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id_siswa' => 'required|exists:identitas_anak,id',
-            'tinggi_badan' => 'required|numeric',
-            'berat_badan' => 'required|numeric',
-            'lingkar_kepala' => 'required|numeric',
-            'umur' => 'required|integer',
+            'id_siswa'      => 'required|exists:identitas_anak,id',
+            'tinggi_badan'  => 'required|numeric',
+            'berat_badan'   => 'required|numeric',
+            'lingkar_kepala'=> 'required|numeric',
+            'umur'          => 'required|integer',
         ]);
 
         TumbuhKembang::create($request->all());
 
-        return redirect()->route('tumbuh_kembang.index')->with('success', 'Data tumbuh kembang berhasil disimpan.');
+        return redirect()->route('tumbuh_kembang.index')
+                         ->with('success', 'Data tumbuh kembang berhasil disimpan.');
     }
 
     public function edit($id)
     {
-        $data = TumbuhKembang::findOrFail($id);
+        $data  = TumbuhKembang::findOrFail($id);
         $siswa = IdentitasAnak::all();
         return view('kepala_sekolah.prediksi.data_tumbuh_kembang.edit', compact('data', 'siswa'));
     }
@@ -46,24 +46,24 @@ class TumbuhKembangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'id_siswa' => 'required|exists:identitas_anak,id',
-            'tinggi_badan' => 'required|numeric',
-            'berat_badan' => 'required|numeric',
-            'lingkar_kepala' => 'required|numeric',
-            'umur' => 'required|integer',
+            'id_siswa'      => 'required|exists:identitas_anak,id',
+            'tinggi_badan'  => 'required|numeric',
+            'berat_badan'   => 'required|numeric',
+            'lingkar_kepala'=> 'required|numeric',
+            'umur'          => 'required|integer',
         ]);
 
         $data = TumbuhKembang::findOrFail($id);
         $data->update($request->all());
 
-        return redirect()->route('tumbuh_kembang.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('tumbuh_kembang.index')
+                         ->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $data = TumbuhKembang::findOrFail($id);
-        $data->delete();
-
-        return redirect()->route('tumbuh_kembang.index')->with('success', 'Data berhasil dihapus.');
+        TumbuhKembang::findOrFail($id)->delete();
+        return redirect()->route('tumbuh_kembang.index')
+                         ->with('success', 'Data berhasil dihapus.');
     }
 }
