@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TumbuhKembang;
 use App\Models\IdentitasAnak;
+use Carbon\Carbon;          // <── tambahkan use Carbon
 
 class TumbuhKembangController extends Controller
 {
@@ -30,7 +31,11 @@ class TumbuhKembangController extends Controller
             'umur'          => 'required|integer',
         ]);
 
-        TumbuhKembang::create($request->all());
+        // tambahkan tanggal hari ini
+        $input = $request->all();
+        $input['tanggal_input'] = Carbon::today()->toDateString(); // 2025-07-30
+
+        TumbuhKembang::create($input);
 
         return redirect()->route('tumbuh_kembang.index')
                          ->with('success', 'Data tumbuh kembang berhasil disimpan.');
@@ -54,7 +59,7 @@ class TumbuhKembangController extends Controller
         ]);
 
         $data = TumbuhKembang::findOrFail($id);
-        $data->update($request->all());
+        $data->update($request->all()); // tanggal_input bisa di-edit via form
 
         return redirect()->route('tumbuh_kembang.index')
                          ->with('success', 'Data berhasil diperbarui.');
