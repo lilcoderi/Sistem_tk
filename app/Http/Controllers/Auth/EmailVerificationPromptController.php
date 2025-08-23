@@ -15,12 +15,11 @@ class EmailVerificationPromptController extends Controller
      */
     public function __invoke(Request $request): RedirectResponse|View
     {
-        // Debugging: Catat saat controller ini dipanggil
         Log::debug('EmailVerificationPromptController: Metode __invoke dipanggil.');
         Log::debug('EmailVerificationPromptController: Pengguna ' . $request->user()->id . ' sudah terverifikasi: ' . ($request->user()->hasVerifiedEmail() ? 'true' : 'false'));
 
         return $request->user()->hasVerifiedEmail()
-                                ? redirect()->intended(route('form.identitas_anak', ['id_pendaftaran' => $request->user()->id], absolute: false)) // Ubah ke route 'form.identitas_anak'
+                                ? redirect()->route('form.identitas_anak', ['id_pendaftaran' => $request->user()->id], false) // Menggunakan redirect()->route()
                                 : view('auth.verify-email-standalone');
     }
 }

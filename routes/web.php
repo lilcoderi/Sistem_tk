@@ -112,7 +112,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Pendaftaran Identitas Anak
     Route::middleware(['auth'])->group(function () {
-        Route::get('/identitas-anak/{id_pendaftaran}', [IdentitasAnakController::class, 'formIdentitasAnak'])->middleware('verified')->name('form.identitas_anak');
+        Route::get('/identitas-anak/{id_pendaftaran}', [IdentitasAnakController::class, 'formIdentitasAnak'])
+        ->middleware('verified') // Middleware ini akan memastikan email sudah terverifikasi
+        ->name('form.identitas_anak');
+        
         Route::post('/identitas-anak/{id_pendaftaran}', [IdentitasAnakController::class, 'simpanIdentitasAnak'])->name('simpan.identitas_anak');
 
         Route::get('/identitas-orangtua/{id_pendaftaran}', [OrangtuaController::class, 'create'])->name('orangtua.create');
