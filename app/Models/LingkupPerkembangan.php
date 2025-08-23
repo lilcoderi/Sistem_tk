@@ -14,12 +14,18 @@ class LingkupPerkembangan extends Model
     protected $fillable = [
         'nama_lingkup',
         'tujuan_pembelajaran',
-        'deskripsi'
+        'deskripsi',
+        'kurikulum_id',
     ];
 
     public function tingkatPencapaian()
     {
         return $this->hasMany(TingkatPencapaian::class, 'lingkup_id');
+    }
+
+    public function kurikulum()
+    {
+        return $this->belongsTo(Kurikulum::class, 'kurikulum_id', 'id');
     }
 
     

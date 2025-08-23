@@ -36,6 +36,7 @@ use App\Http\Controllers\RaporController;
 use App\Http\Controllers\NotifikasiOrangTuaController;
 use App\Http\Controllers\NotifikasiKepsekController;
 use App\Http\Controllers\DashboardSekolahController;
+use App\Http\Controllers\KurikulumController; // Impor KurikulumController
 
 
 
@@ -328,6 +329,7 @@ Route::get('/dashboard-sekolah/statistik', [DashboardSekolahController::class, '
 
 
 
+Route::resource('kurikulum', KurikulumController::class)->names('kurikulum');
 
 
 
