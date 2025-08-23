@@ -10,16 +10,19 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Jika Anda menggunakan platform seperti Railway, Vercel, Heroku, dll.,
+     * aplikasi Anda biasanya berada di belakang proxy yang IP-nya bisa berubah-ubah.
+     * Mengatur ke '**' memercayai semua proxy. Ini umum untuk cloud hosting.
+     * Hanya gunakan ini jika Anda yakin semua traffic melalui proxy yang Anda kontrol.
+     *
      * @var array<int, string>|string|null
      */
-    // Jika Anda TIDAK TAHU IP proxy Anda, atau jika itu berubah-ubah (misal di cloud hosting),
-    // Anda bisa menggunakan '**' untuk memercayai semua proxy.
-    // HATI-HATI: Ini harus digunakan dengan bijak karena dapat memiliki implikasi keamanan jika
-    // Anda tidak sepenuhnya mengontrol semua proxy di depan aplikasi Anda.
     protected $proxies = '**';
 
     /**
      * The headers that should be used to detect proxies.
+     * Ini memberi tahu Laravel header HTTP mana yang harus diperiksa
+     * untuk mendapatkan informasi proxy (seperti skema asli: HTTP/HTTPS).
      *
      * @var int
      */
@@ -27,6 +30,6 @@ class TrustProxies extends Middleware
         Request::HEADER_X_FORWARDED_FOR |
         Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |
-        Request::HEADER_X_FORWARDED_PROTO |
-        Request::HEADER_X_FORWARDED_AWS_ELB; // Tambahkan ini jika Anda menggunakan AWS ELB
+        Request::HEADER_X_FORWARDED_PROTO | // SANGAT PENTING untuk mendeteksi HTTPS
+        Request::HEADER_X_FORWARDED_AWS_ELB; // Jika Anda menggunakan AWS ELB, pertahankan ini
 }
