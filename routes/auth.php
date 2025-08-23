@@ -11,6 +11,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes
@@ -48,6 +51,11 @@ Route::middleware('auth')->group(function () {
     // Halaman verifikasi email setelah register
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
+
+    Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/dashboard'); // arahkan ke halaman setelah verifikasi
+    })->middleware(['auth', 'signed'])->name('verification.verify');
 
     // Link verifikasi email (dikirim ke email)
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
