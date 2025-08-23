@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Monitoring</a></li>
-                        <li class="breadcrumb-item active">Data Tumbuh Kembang</li>
+                        <li class="breadcrumb-item active">Data Tumbuh Kembang </li>
                     </ul>
                 </div>
             </div>

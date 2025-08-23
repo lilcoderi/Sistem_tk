@@ -332,3 +332,4 @@ Route::get('/dashboard-sekolah/statistik', [DashboardSekolahController::class, '
 
 
 });
+require __DIR__.'/auth.php';
