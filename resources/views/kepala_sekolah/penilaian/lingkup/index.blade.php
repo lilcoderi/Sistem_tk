@@ -44,6 +44,29 @@
             </div>
         @endif
 
+        {{-- Alert Error Umum (dari controller) --}}
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-x-circle-fill me-2"></i>{{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            </div>
+        @endif
+
+        {{-- Menampilkan pesan validasi jika ada --}}
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Terjadi kesalahan validasi:</strong>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+            </div>
+        @endif
+
+
         {{-- Filter & Tombol Tambah --}}
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 gap-3">
             {{-- Form Filter Sort dan Kurikulum --}}
@@ -185,12 +208,20 @@
                         <div class="mb-3">
                             <label for="kurikulumNama" class="form-label">Nama Kurikulum</label>
                             <input type="text" class="form-control" id="kurikulumNama" name="nama"
-                                placeholder="Contoh: Kurikulum Merdeka" required>
+                                placeholder="Contoh: Kurikulum Merdeka" value="{{ old('nama') }}" required>
+                             {{-- Tampilkan error khusus untuk field 'nama' --}}
+                            @error('nama')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="kurikulumTahun" class="form-label">Tahun Kurikulum</label>
                             <input type="number" class="form-control" id="kurikulumTahun" name="tahun"
-                                placeholder="Contoh: 2024" min="1900" max="2100" required>
+                                placeholder="Contoh: 2024" min="1900" max="2100" value="{{ old('tahun') }}" required>
+                            {{-- Tampilkan error khusus untuk field 'tahun' --}}
+                            @error('tahun')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -203,7 +234,7 @@
     </div>
 
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="[https://cdn.jsdelivr.net/npm/sweetalert2@11](https://cdn.jsdelivr.net/npm/sweetalert2@11)"></script>
 
     <script>
         function confirmHapusUmum(event, form, pesan = 'Data akan dihapus.') {
@@ -226,5 +257,11 @@
 
             return false;
         }
+
+        // Script untuk menampilkan modal jika ada error validasi setelah redirect
+        @if ($errors->any() && (old('nama') || old('tahun')))
+            var tambahKurikulumModal = new bootstrap.Modal(document.getElementById('tambahKurikulumModal'));
+            tambahKurikulumModal.show();
+        @endif
     </script>
 @endsection
