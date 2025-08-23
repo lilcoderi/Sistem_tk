@@ -17,16 +17,20 @@ class CustomVerifyEmail extends BaseVerifyEmail
      */
     protected function verificationUrl($notifiable)
     {
-        // Debugging: Catat notifiable properties
         Log::debug('CustomVerifyEmail: Generating verification URL for user ID: ' . $notifiable->getKey() . ' email: ' . $notifiable->getEmailForVerification());
+        
+        // Dapatkan APP_URL yang digunakan oleh Laravel saat ini
+        Log::debug('CustomVerifyEmail: config(\'app.url\') saat ini: ' . config('app.url'));
+        Log::debug('CustomVerifyEmail: config(\'app.key\') saat ini: ' . config('app.key'));
 
-        // Gunakan metode parent untuk menghasilkan URL yang ditandatangani dengan benar
-        // Ini akan memanggil URL::temporarySignedRoute secara internal.
+        // Pastikan APP_FORCE_HTTPS diaktifkan jika aplikasi Anda menggunakan HTTPS di belakang proxy
+        // if (env('APP_ENV') === 'production' && env('APP_FORCE_HTTPS', false)) {
+        //     URL::forceScheme('https');
+        //     Log::debug('CustomVerifyEmail: forceScheme(\'https\') diterapkan.');
+        // }
+
         $url = parent::verificationUrl($notifiable);
-
-        // Debugging: Catat URL yang dihasilkan
         Log::debug('CustomVerifyEmail: Generated verification URL: ' . $url);
-
         return $url;
     }
 
@@ -38,7 +42,6 @@ class CustomVerifyEmail extends BaseVerifyEmail
      */
     public function toMail($notifiable)
     {
-        // Pastikan Anda memanggil verificationUrl() untuk mendapatkan URL yang benar
         $actionUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)

@@ -18,10 +18,23 @@ class VerifyEmailController extends Controller
         Log::debug('VerifyEmailController: Metode __invoke dipanggil.');
         Log::debug('VerifyEmailController: ID Pengguna: ' . $request->user()->id . ', Email: ' . $request->user()->email);
 
-        // Jika email sudah terverifikasi, langsung redirect ke form.identitas_anak
+        // --- DEBUGGING TANDA TANGAN URL LEBIH DETAIL ---
+        Log::debug('VerifyEmailController: URL Lengkap yang Diterima: ' . $request->fullUrl());
+        Log::debug('VerifyEmailController: Host & Skema yang Diterima: ' . $request->getSchemeAndHttpHost());
+        Log::debug('VerifyEmailController: Path URL yang Diterima: ' . $request->path());
+        Log::debug('VerifyEmailController: Query String Diterima: ' . $request->getQueryString());
+        Log::debug('VerifyEmailController: Parameter Query Diterima: ' . json_encode($request->query->all()));
+        Log::debug('VerifyEmailController: Validasi tanda tangan URL: ' . ($request->hasValidSignature() ? 'true' : 'false'));
+        // --- AKHIR DEBUGGING TANDA TANGAN URL ---
+
+        if (!$request->hasValidSignature()) {
+            Log::error('VerifyEmailController: ERROR - Tanda tangan URL TIDAK valid.');
+            // Middleware 'signed' seharusnya sudah menangani 403, tapi ini untuk log konfirmasi.
+            // Anda bisa tambahkan redirect khusus di sini jika ingin penanganan 403 yang berbeda.
+        }
+
         if ($request->user()->hasVerifiedEmail()) {
             Log::debug('VerifyEmailController: Email sudah terverifikasi. Mengalihkan secara eksplisit ke form.identitas_anak.');
-            // *** PENTING: Menggunakan redirect()->route() secara eksplisit ***
             return redirect()->route('form.identitas_anak', ['id_pendaftaran' => $request->user()->id], false);
         }
 
@@ -33,10 +46,7 @@ class VerifyEmailController extends Controller
             Log::error('VerifyEmailController: Gagal menandai email sebagai terverifikasi untuk pengguna ' . $request->user()->id);
         }
 
-        // Setelah berhasil verifikasi (atau jika sudah terverifikasi sebelumnya),
-        // redirect ke halaman form.identitas_anak
         Log::debug('VerifyEmailController: Mengalihkan secara eksplisit ke form.identitas_anak setelah percobaan verifikasi.');
-        // *** PENTING: Menggunakan redirect()->route() secara eksplisit ***
         return redirect()->route('form.identitas_anak', ['id_pendaftaran' => $request->user()->id], false);
     }
 }
