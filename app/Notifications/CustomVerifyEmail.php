@@ -6,50 +6,34 @@ use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
+use App\Models\Pendaftaran; // Import model Pendaftaran
 
-class CustomVerifyEmail extends BaseVerifyEmail
+class EmailVerificationNotificationController extends Controller
 {
     /**
-     * Get the verification URL for the given notifiable.
-     *
-     * @param  mixed  $notifiable
-     * @return string
+     * Send a new email verification notification.
      */
-    protected function verificationUrl($notifiable)
+    public function store(Request $request): RedirectResponse
     {
-        Log::debug('CustomVerifyEmail: Generating verification URL for user ID: ' . $notifiable->getKey() . ' email: ' . $notifiable->getEmailForVerification());
-        
-        // Dapatkan APP_URL yang digunakan oleh Laravel saat ini
-        Log::debug('CustomVerifyEmail: config(\'app.url\') saat ini: ' . config('app.url'));
-        Log::debug('CustomVerifyEmail: config(\'app.key\') saat ini: ' . config('app.key'));
+        Log::debug('EmailVerificationNotificationController: Metode store dipanggil.');
+        Log::debug('EmailVerificationNotificationController: Pengguna ' . $request->user()->id . ' sudah terverifikasi: ' . ($request->user()->hasVerifiedEmail() ? 'true' : 'false'));
 
-        // Pastikan APP_FORCE_HTTPS diaktifkan jika aplikasi Anda menggunakan HTTPS di belakang proxy
-        // if (env('APP_ENV') === 'production' && env('APP_FORCE_HTTPS', false)) {
-        //     URL::forceScheme('https');
-        //     Log::debug('CustomVerifyEmail: forceScheme(\'https\') diterapkan.');
-        // }
+        if ($request->user()->hasVerifiedEmail()) {
+            // Jika sudah terverifikasi, cari id_pendaftaran dan redirect
+            $pendaftaranRecord = Pendaftaran::where('user_id', $request->user()->id)->first();
+            if ($pendaftaranRecord) {
+                $id_pendaftaran_value = $pendaftaranRecord->id_pendaftaran;
+                Log::debug('EmailVerificationNotificationController: Mengalihkan pengguna terverifikasi ke form.identitas_anak dengan id_pendaftaran: ' . $id_pendaftaran_value);
+                return redirect()->route('form.identitas_anak', ['id_pendaftaran' => $id_pendaftaran_value], false);
+            } else {
+                Log::warning('EmailVerificationNotificationController: Pengguna terverifikasi ' . $request->user()->id . ' tidak memiliki record Pendaftaran. Mengalihkan ke halaman utama.');
+                return redirect('/'); // Fallback
+            }
+        }
 
-        $url = parent::verificationUrl($notifiable);
-        Log::debug('CustomVerifyEmail: Generated verification URL: ' . $url);
-        return $url;
-    }
+        $request->user()->sendEmailVerificationNotification();
+        Log::debug('EmailVerificationNotificationController: Notifikasi verifikasi email baru telah dikirimkan.');
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        $actionUrl = $this->verificationUrl($notifiable);
-
-        return (new MailMessage)
-            ->subject('Verifikasi Email Anda')
-            ->view('emails.verify-email-custom', [
-                'actionUrl' => $actionUrl,
-                'subject'   => 'Verifikasi Email Anda',
-                'greeting'  => 'Verifikasi Alamat Email Anda',
-            ]);
+        return back()->with('status', 'verification-link-sent');
     }
 }

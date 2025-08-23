@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\URL; // Sudah diimpor dengan benar
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Jakarta');
         Carbon::setLocale('id');
 
-        // Paksa semua URL menjadi HTTPS jika di environment production
+        // Ini adalah solusi untuk 'Invalid signature' di balik HTTPS proxy
+        // Jika aplikasi berjalan di lingkungan produksi, paksa Laravel untuk selalu menghasilkan URL dengan skema HTTPS.
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
