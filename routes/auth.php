@@ -52,12 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
-    Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect('/dashboard'); // arahkan ke halaman setelah verifikasi
-    })->middleware(['auth', 'signed'])->name('verification.verify');
-
-    // Link verifikasi email (dikirim ke email)
+    // HANYA PERTAHANKAN RUTE INI untuk memproses verifikasi email
+    // Ini akan memanggil VerifyEmailController untuk menandai email sebagai terverifikasi
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
