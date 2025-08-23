@@ -1,7 +1,7 @@
 @extends('kepala_sekolah.layouts.app')
 
 @section('title')
-    Tambah Data Guru
+    Edit Lingkup Pembelajaran
 @endsection
 
 <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
@@ -20,9 +20,8 @@
                             <a href="{{ route('lingkup.index') }}">Lingkup Pembelajaran</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('lingkup.create') }}">Edit Lingkup Pembelajaran</a>
+                            <a href="{{ route('lingkup.edit', $lingkup->id) }}">Edit Lingkup Pembelajaran</a>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -43,6 +42,25 @@
                         <form action="{{ route('lingkup.update', $lingkup->id) }}" method="POST" novalidate>
                             @csrf
                             @method('PUT')
+
+                            <div class="mb-4">
+                                <label for="kurikulum_id" class="form-label fw-semibold text-success">
+                                    <i class="bi bi-journals me-1"></i> Kurikulum
+                                </label>
+                                <select class="form-select form-control-lg border-3 shadow-sm @error('kurikulum_id') is-invalid @enderror"
+                                    id="kurikulum_id" name="kurikulum_id" required>
+                                    <option value="">-- Pilih Kurikulum --</option>
+                                    @foreach ($kurikulums as $kurikulum)
+                                        <option value="{{ $kurikulum->id }}"
+                                            {{ old('kurikulum_id', $lingkup->kurikulum_id) == $kurikulum->id ? 'selected' : '' }}>
+                                            {{ $kurikulum->nama }} ({{ $kurikulum->tahun }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('kurikulum_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <div class="mb-4">
                                 <label for="nama_lingkup" class="form-label fw-semibold text-success">

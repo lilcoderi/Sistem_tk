@@ -40,6 +40,25 @@
                             @csrf
 
                             <div class="mb-4">
+                                <label for="kurikulum_id" class="form-label fw-semibold text-success">
+                                    <i class="bi bi-journals me-1"></i> Kurikulum
+                                </label>
+                                <select class="form-select form-control-lg border-3 shadow-sm @error('kurikulum_id') is-invalid @enderror"
+                                    id="kurikulum_id" name="kurikulum_id" required>
+                                    <option value="">-- Pilih Kurikulum --</option>
+                                    @foreach ($kurikulums as $kurikulum)
+                                        <option value="{{ $kurikulum->id }}"
+                                            {{ old('kurikulum_id') == $kurikulum->id ? 'selected' : '' }}>
+                                            {{ $kurikulum->nama }} ({{ $kurikulum->tahun }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('kurikulum_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-4">
                                 <label for="nama_lingkup" class="form-label fw-semibold text-success">
                                     <i class="bi bi-tags-fill me-1"></i> Nama Lingkup
                                 </label>

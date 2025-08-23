@@ -1,7 +1,7 @@
 @extends('kepala_sekolah.layouts.app')
 
 @section('title')
-    Tambah Lingkup Pembelajaran
+    Detail Lingkup Pembelajaran
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                             <a href="{{ route('lingkup.index') }}">Lingkup Pembelajaran</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('lingkup.create') }}">Tambah Lingkup Pembelajaran</a>
+                            <a href="{{ route('lingkup.show', $lingkup->id) }}">Detail Lingkup Pembelajaran</a>
                         </li>
                     </ul>
                 </div>
@@ -45,6 +45,11 @@
 
                     <div class="card-body">
                         <dl class="row mb-4">
+                            <dt class="col-sm-4 fw-semibold">Kurikulum</dt> {{-- Baris baru untuk Kurikulum --}}
+                            <dd class="col-sm-8">
+                                {{ $lingkup->kurikulum->nama ?? '-' }} ({{ $lingkup->kurikulum->tahun ?? '-' }})
+                            </dd>
+
                             <dt class="col-sm-4 fw-semibold">Nama Lingkup</dt>
                             <dd class="col-sm-8">{{ $lingkup->nama_lingkup }}</dd>
 
@@ -58,12 +63,9 @@
                                 {{ $lingkup->deskripsi }}
                             </dd>
                         </dl>
-
-
                     </div>
-
                 </div>
-                <div class="text-end">
+                <div class="text-end mt-3">
                     <a href="{{ route('lingkup.index') }}" class="btn btn-outline-secondary me-2">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
