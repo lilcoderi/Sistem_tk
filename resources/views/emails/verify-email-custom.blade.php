@@ -19,13 +19,6 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             padding: 30px;
         }
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo img {
-            max-width: 100px;
-        }
         h1 {
             font-size: 20px;
             color: #111827;
