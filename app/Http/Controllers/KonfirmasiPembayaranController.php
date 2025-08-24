@@ -7,6 +7,7 @@ use App\Models\Pembayaran;
 use App\Models\NotifikasiOrangTua;
 use App\Notifications\PaymentStatusUpdated;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class KonfirmasiPembayaranController extends Controller
 {
@@ -53,29 +54,60 @@ class KonfirmasiPembayaranController extends Controller
         ]);
 
         $pembayaran = Pembayaran::with(['identitas_anak', 'pendaftaran'])->findOrFail($id);
-
         $oldStatus = $pembayaran->status;
+        $newStatus = $request->status;
 
-        $pembayaran->update([
-            'status' => $request->status,
+        // Log::info() untuk memulai proses debugging
+        Log::info('Memulai update status pembayaran', [
+            'id_pembayaran' => $id,
+            'status_lama' => $oldStatus,
+            'status_baru' => $newStatus,
+            'id_pendaftaran' => $pembayaran->pendaftaran->id ?? 'N/A'
         ]);
 
-        if ($pembayaran->pendaftaran?->user_id && $oldStatus !== $request->status) {
-            $user = User::find($pembayaran->pendaftaran->user_id);
+        $pembayaran->update([
+            'status' => $newStatus,
+        ]);
 
-            if ($user && in_array($request->status, ['verifikasi', 'ditolak'])) {
-                // Kirim notifikasi email menggunakan Notification
-                $user->notify(new PaymentStatusUpdated($pembayaran, $oldStatus));
+        // Periksa apakah status benar-benar berubah
+        if ($oldStatus !== $newStatus) {
+            Log::info('Status pembayaran berubah, memproses notifikasi.');
+            
+            // Periksa apakah ada user yang terhubung
+            $userId = $pembayaran->pendaftaran->user_id ?? null;
 
-                // Simpan juga di tabel notifikasi (opsional)
-                $statusText = $request->status === 'verifikasi' ? 'diterima' : 'ditolak';
-                NotifikasiOrangTua::create([
-                    'user_id' => $user->id,
-                    'tipe' => 'pembayaran',
-                    'referensi_id' => $pembayaran->id,
-                    'pesan' => 'Status pembayaran untuk anak ' . ($pembayaran->identitas_anak->nama_lengkap ?? '-') . ' telah ' . $statusText . '.',
-                ]);
+            if ($userId) {
+                $user = User::find($userId);
+
+                if ($user) {
+                    Log::info('User ditemukan, akan mengirim notifikasi.', ['user_id' => $user->id, 'email' => $user->email]);
+
+                    // Kirim notifikasi email hanya jika statusnya 'verifikasi' atau 'ditolak'
+                    if (in_array($newStatus, ['verifikasi', 'ditolak'])) {
+                        $user->notify(new PaymentStatusUpdated($pembayaran, $oldStatus));
+                        Log::info('Notifikasi email berhasil di-queue untuk dikirim.');
+                    } else {
+                        Log::info('Status baru bukan verifikasi atau ditolak, tidak mengirim notifikasi email.');
+                    }
+                    
+                    // Simpan juga di tabel notifikasi (opsional)
+                    $statusText = $newStatus === 'verifikasi' ? 'diterima' : ($newStatus === 'ditolak' ? 'ditolak' : 'diperbarui');
+                    NotifikasiOrangTua::create([
+                        'user_id' => $user->id,
+                        'tipe' => 'pembayaran',
+                        'referensi_id' => $pembayaran->id,
+                        'pesan' => 'Status pembayaran untuk anak ' . ($pembayaran->identitas_anak->nama_lengkap ?? '-') . ' telah ' . $statusText . '.',
+                    ]);
+                    Log::info('Notifikasi berhasil disimpan ke tabel NotifikasiOrangTua.');
+
+                } else {
+                    Log::warning('User tidak ditemukan untuk ID pendaftaran.', ['user_id' => $userId]);
+                }
+            } else {
+                Log::warning('ID user tidak ditemukan pada pendaftaran ini. Notifikasi tidak dapat dikirim.');
             }
+        } else {
+            Log::info('Status pembayaran tidak berubah, tidak perlu mengirim notifikasi.');
         }
 
         return redirect()->route('konfirmasi-pembayaran.index')

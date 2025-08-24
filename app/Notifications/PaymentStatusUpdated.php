@@ -2,15 +2,15 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+// Hapus 'Illuminate\Contracts\Queue\ShouldQueue' dan 'Illuminate\Bus\Queueable'
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Pembayaran;
 
-class PaymentStatusUpdated extends Notification implements ShouldQueue
+class PaymentStatusUpdated extends Notification
 {
-    use Queueable;
+    // Hapus 'use Queueable;'
+    // use Queueable;
 
     protected $pembayaran;
     protected $oldStatus;
@@ -50,7 +50,6 @@ class PaymentStatusUpdated extends Notification implements ShouldQueue
         };
 
         $childName = $this->pembayaran->identitas_anak->nama_lengkap ?? 'Siswa';
-        $pembayaranLink = url('/pembayaran/' . $this->pembayaran->id);
 
         return (new MailMessage)
             ->subject('Pembaruan Status Pembayaran: ' . ucfirst($this->pembayaran->status))
@@ -61,7 +60,7 @@ class PaymentStatusUpdated extends Notification implements ShouldQueue
                 'oldStatus' => $this->oldStatus,
                 'statusText' => $statusText,
                 'actionMessage' => $actionMessage,
-                'pembayaranLink' => $pembayaranLink,
+                'pembayaranLink' => url('/pembayaran/' . $this->pembayaran->id),
             ]);
     }
 
